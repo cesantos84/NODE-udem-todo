@@ -1,3 +1,5 @@
+//cd C:\Program Files\MongoDB\Server\3.4\bin
+//mongod.exe --dbpath /web/Mongo-data
 // const MongoClient = require('mongodb').MongoClient;
 const {MongoClient, ObjectID} = require('mongodb');
 
