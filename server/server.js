@@ -1,5 +1,10 @@
+/*db startup*/
+	//cd C:\Program Files\MongoDB\Server\3.4\bin
+	//mongod.exe --dbpath /web/Mongo-data
+/*db startup*/
 var express = require('express');
 var bodyParser = require('body-parser');
+const {ObjectID} = require('mongodb');
 
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
@@ -28,7 +33,38 @@ app.get('/todos', (req, res) => {
 	}, (e) => {
 		res.status(400).send(e);
 	})
-})
+});
+
+app.get('/todos/:id', (req, res) => {
+	var id = req.params.id;
+
+	//valid id is using isValid
+		//404 - send back empty send
+	if(!ObjectID.isValid(id)){
+		return res.status(404).send();
+	}
+
+	//findById
+	Todo.findById(id).then((todo) =>{
+		if(!todo){
+			return res.status(404).send();
+		}
+
+		res.send({todo});
+	}).catch((e) => {
+		res.status(400).send();
+	});
+		//success
+			//if todo - send it back
+			//if no todo - send 404 w/ empty body
+		//error
+			//400 - send back empty
+	Todo.find().then((todos) => {
+		res.send({todos});
+	}, (e) => {
+		res.status(400).send(e);
+	})
+});
 
 app.listen(3000, () => {
 	console.log('Started on port 3000');
