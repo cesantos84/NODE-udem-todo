@@ -1,9 +1,10 @@
 var env = process.env.NODE_ENV || 'development';
 
-if(env === 'development'){
-	process.env.PORT = 3000;
-	process.env.MONGOLAB_BROWN_URI = 'mongodb://localhost:27017/TodoApp';
-} else if (env.trim() === 'test'){
-	process.env.PORT = 3000;
-	process.env.MONGOLAB_BROWN_URI = 'mongodb://localhost:27017/TodoAppTest';
+if(env.trim() === 'development' || env.trim() === 'test'){
+	var config = require('./config.json');
+	var envConfig = config[env.trim()];
+	
+	Object.keys(envConfig).forEach((key) => {
+		process.env[key] = envConfig[key];
+	});
 }
